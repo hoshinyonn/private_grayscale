@@ -43,6 +43,19 @@ class InquiryView(generic.FormView):
     template_name = "inquiry.html"
     form_class = InquiryForm
 
+    def get_form(self, form_class=None):
+        # contact.hmltで、データを送信した場合
+        if 'name' in self.request.POST:
+            form_data = self.request.POST
+  
+        # お問い合わせフォーム確認画面から「戻る」リンクを押した場合や
+        # 初回の入力欄表示は以下の表示。
+        # セッションにユーザーデータがあれば、それをフォームに束縛
+        else:
+            form_data = self.request.session.get('form_data', None)
+  
+        return self.form_class(form_data)
+
     def form_valid(self, form):
         return render(self.request,'contact_confirm.html',{'form':form})
 
@@ -78,9 +91,6 @@ class GrayscaleListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         queryset = Grayscale.objects.filter(user=self.request.user).order_by('-created_at')
-        #return diaries
-    #def get_queryset(self):
-        #queryset = Grayscale.objects.order_by('-created_date')
         query = self.request.GET.get('query')
 
         if query:

@@ -32,7 +32,11 @@
                         {{ grayscale.title }}
                     </h2>
                     <h3 class="post-subtitle">
+                        {% if grayscale.content != '' %}
                         {{ grayscale.content|truncatechars:20 }}
+                        {% else %}
+                        {{'※本文が入力されていません'}}
+                        {% endif %}
                     </h3>
                 </a>
                 <p class="post-meta">{{ grayscale.created_at }}</p>
@@ -74,7 +78,6 @@
                 </ul>
             {% endif %}
         </div>
-    <a href="{% url 'grayscale:index'%}"><button type="button" class="btn btn-primary">戻る</button></a>
     </div>
 </div>
 {% endblock %}
