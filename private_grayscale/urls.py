@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('grayscale.urls')),
     path('accounts/', include('allauth.urls')),
+    
 ]
 
 # 開発サーバーでメディアを配信できるようにする設定
