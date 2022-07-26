@@ -16,7 +16,7 @@ class InquiryForm(forms.Form):
     title = forms.CharField(label='タイトル', max_length=30)
     def clean_title(self):
         title = self.cleaned_data['title']
-        if title in ['hoge', '阿呆', 'fuck']:
+        if title in ['お禿', '阿呆', 'fuck']:
             raise forms.ValidationError('この言葉は使えません')
         return title
     message = forms.CharField(label='メッセージ', widget=forms.Textarea)
