@@ -73,6 +73,9 @@ class contact_confirm(generic.TemplateView):
         context['form'] = InquiryForm(form_data)
         return context
 
+    #def form_valid(self, form):
+        #return render(self.request,'contact_confirm.html',{'form':form})
+
 class contact_send(generic.FormView):
     """お問い合わせ送信"""
  
