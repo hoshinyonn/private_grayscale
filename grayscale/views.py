@@ -42,22 +42,25 @@ class IndexView(generic.TemplateView):
 class InquiryView(generic.FormView):
     template_name = "inquiry.html"
     form_class = InquiryForm
+    success_url = reverse_lazy('grayscale:contact_confirm')
 
     def get_form(self, form_class=None):
         # contact.hmltで、データを送信した場合
         if 'name' in self.request.POST:
             form_data = self.request.POST
-  
+ 
         # お問い合わせフォーム確認画面から「戻る」リンクを押した場合や
         # 初回の入力欄表示は以下の表示。
         # セッションにユーザーデータがあれば、それをフォームに束縛
         else:
             form_data = self.request.session.get('form_data', None)
-  
+ 
         return self.form_class(form_data)
 
     def form_valid(self, form):
-        return render(self.request,'contact_confirm.html',{'form':form})
+        # 入力した値を、セッションに保存
+        self.request.session['form_data'] = self.request.POST
+        return super().form_valid(form)
 
 class contact_confirm(generic.TemplateView):
     """お問い合わせフォーム確認ページ"""
@@ -67,9 +70,8 @@ class contact_confirm(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         form_data = self.request.session.get('form_data', None)
-        context['form'] = Grayscale(form_data)
+        context['form'] = InquiryForm(form_data)
         return context
-
 
 class contact_send(generic.FormView):
     """お問い合わせ送信"""
