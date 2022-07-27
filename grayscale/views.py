@@ -89,6 +89,23 @@ class contact_send(generic.FormView):
         logger.info('Inquiry sent by {}'.format(form.cleaned_data['name']))
         return super().form_valid(form)
         
+class ShareListView(LoginRequiredMixin, generic.ListView):
+    context_object_name = 'diary_share'
+    queryset = Grayscale.objects.filter(checkbox=True).order_by('-created_at')
+    model = Grayscale
+    paginate_by = 2
+    template_name = 'diary_share.html'
+
+    def get_queryset(self): # 検索機能のために追加
+        queryset = Grayscale.objects.filter(checkbox=True).order_by('-created_at')
+        query = self.request.GET.get('query')
+
+        if query:
+            queryset = queryset.filter(
+            Q(title__icontains=query)
+            )
+        return queryset
+
 class GrayscaleListView(LoginRequiredMixin, generic.ListView):
     model = Grayscale
     template_name = 'grayscale_list.html'
