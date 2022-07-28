@@ -66,10 +66,16 @@ class InquiryForm(forms.Form):
 class GrayscaleCreateForm(forms.ModelForm):
     class Meta:
         model = Grayscale
-        fields = ('title', 'content', 'photo1', 'photo2', 'photo3', )
+        fields = ('title', 'content', 'photo1', 'photo2', 'photo3', 'checkbox')
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        cnt=1
+        #「6」の時にcheckboxクラスの処理、1~5の時はform-controlの処理
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
+            if cnt == 6:
+                field.widget.attrs['class'] = 'checkbox'  
+            else:  
+                field.widget.attrs['class'] = 'form-control'
+            cnt += 1
 
